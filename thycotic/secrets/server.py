@@ -289,8 +289,8 @@ class SecretServer:
 
         :param id: the id of the secret
         :type id: int
-        :param query_params: query parameter to pass to the endpoint
-        :type query_params: str
+        :param query_params: query parameters to pass to the endpoint
+        :type query_params: dict
         :return: a JSON formatted string representation of the secret
         :rtype: ``str``
         :raise: :class:`SecretServerAccessError` when the caller does not have
@@ -305,7 +305,8 @@ class SecretServer:
         else:
             return self.process(
                 requests.get(
-                    f"{self.api_url}/secrets/{id}?{query_params}",
+                    f"{self.api_url}/secrets/{id}", 
+                    params=query_params,
                     headers=self.headers(),
                 )
             ).text
@@ -319,8 +320,8 @@ class SecretServer:
                                        and replace itemValue with the contents
                                        for each item (field), automatically
         :type fetch_file_attachments: bool
-        :param query_params: query parameter to pass to the endpoint
-        :type query_params: str
+        :param query_params: query parameters to pass to the endpoint
+        :type query_params: dict
         :return: a ``dict`` representation of the secret
         :rtype: ``dict``
         :raise: :class:`SecretServerAccessError` when the caller does not have
@@ -359,10 +360,16 @@ class SecretServer:
         :return: a ``dict`` representation of the secret
         :rtype: ``dict``
         """
+        if secret_path.startswith("\\"):
+            path = secret_path.rstrip("\\")
+        else:
+            path = "\\" + secret_path.rstrip("\\")
+
+        params = {"secretPath": path}
         return self.get_secret(
             id=0,
             fetch_file_attachments=fetch_file_attachments,
-            query_params=f"secretPath={secret_path}",
+            query_params=params,
         )
 
 
