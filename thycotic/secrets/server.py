@@ -304,7 +304,10 @@ class SecretServer:
             ).text
         else:
             return self.process(
-                requests.get(f"{self.api_url}/secrets/{id}?{query_params}", headers=self.headers())
+                requests.get(
+                    f"{self.api_url}/secrets/{id}?{query_params}",
+                    headers=self.headers(),
+                )
             ).text
 
     def get_secret(self, id, fetch_file_attachments=True, query_params=None):
@@ -356,7 +359,11 @@ class SecretServer:
         :return: a ``dict`` representation of the secret
         :rtype: ``dict``
         """
-        return self.get_secret(id=0, fetch_file_attachments=fetch_file_attachments, query_params=f"secretPath={secret_path}")
+        return self.get_secret(
+            id=0,
+            fetch_file_attachments=fetch_file_attachments,
+            query_params=f"secretPath={secret_path}",
+        )
 
 
 class SecretServerV0(SecretServer):
