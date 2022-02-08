@@ -108,7 +108,7 @@ secret = secret_server.get_secret_by_path(r"\FolderPath\Secret Name")
 print(f"username: {secret.fields['username'].value}\npassword: {secret.fields['password'].value}")
 ```
 
-> Note: The `path` must be the full folder path and name of the secret, including the leading backslash.
+> Note: The `path` must be the full folder path and name of the secret.
 
 ## Using Self-Signed Certificates
 
