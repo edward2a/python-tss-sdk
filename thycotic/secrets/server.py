@@ -361,9 +361,9 @@ class SecretServer:
         :rtype: ``dict``
         """
         if secret_path.startswith("\\"):
-            path = secret_path.rstrip("\\")
+            path = secret_path.replace("\\\\", "\\").rstrip("\\")
         else:
-            path = "\\" + secret_path.rstrip("\\")
+            path = "\\" + secret_path.replace("\\\\", "\\").rstrip("\\")
 
         params = {"secretPath": path}
         return self.get_secret(
