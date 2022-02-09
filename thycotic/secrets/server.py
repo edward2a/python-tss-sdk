@@ -301,9 +301,7 @@ class SecretServer:
         endpoint_url = f"{self.api_url}/secrets/{id}"
 
         if query_params is None:
-            return self.process(
-                requests.get(endpoint_url, headers=self.headers())
-            ).text
+            return self.process(requests.get(endpoint_url, headers=self.headers())).text
         else:
             return self.process(
                 requests.get(
@@ -362,7 +360,7 @@ class SecretServer:
         :return: a ``dict`` representation of the secret
         :rtype: ``dict``
         """
-        path = "\\" + re.sub(r'[\\/]+', r'\\', secret_path).lstrip("\\").rstrip("\\")
+        path = "\\" + re.sub(r"[\\/]+", r"\\", secret_path).lstrip("\\").rstrip("\\")
 
         params = {"secretPath": path}
         return self.get_secret(
