@@ -284,7 +284,7 @@ class SecretServer:
         self.authorizer = authorizer
         self.api_url = f"{base_url}/{api_path_uri.strip('/')}"
 
-    def get_secret_json(self, id, query_params):
+    def get_secret_json(self, id, query_params=None):
         """Gets a Secret from Secret Server
 
         :param id: the id of the secret
@@ -298,14 +298,16 @@ class SecretServer:
         :raise: :class:`SecretServerError` when the REST API call fails for
                 any other reason
         """
+        endpoint_url = f"{self.api_url}/secrets/{id}"
+
         if query_params is None:
             return self.process(
-                requests.get(f"{self.api_url}/secrets/{id}", headers=self.headers())
+                requests.get(endpoint_url, headers=self.headers())
             ).text
         else:
             return self.process(
                 requests.get(
-                    f"{self.api_url}/secrets/{id}", 
+                    endpoint_url,
                     params=query_params,
                     headers=self.headers(),
                 )
@@ -360,10 +362,7 @@ class SecretServer:
         :return: a ``dict`` representation of the secret
         :rtype: ``dict``
         """
-        if secret_path.startswith("\\"):
-            path = secret_path.replace("\\\\", "\\").rstrip("\\")
-        else:
-            path = "\\" + secret_path.replace("\\\\", "\\").rstrip("\\")
+        path = "\\" + re.sub(r'[\\/]+', r'\\', secret_path).lstrip("\\").rstrip("\\")
 
         params = {"secretPath": path}
         return self.get_secret(
