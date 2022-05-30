@@ -159,7 +159,7 @@ class PasswordGrantAuthorizer(Authorizer):
     TOKEN_PATH_URI = "/oauth2/token"
 
     @staticmethod
-    def get_access_grant(token_url, grant_request):
+    def get_access_grant(token_url, grant_request, redirects=False):
         """Gets an *OAuth2 Access Grant* by calling the Secret Server REST API
         ``token`` endpoint
 
@@ -167,7 +167,7 @@ class PasswordGrantAuthorizer(Authorizer):
                 other than a valid Access Grant
         """
 
-        response = requests.post(token_url, grant_request)
+        response = requests.post(token_url, grant_request, allow_redirects=redirects)
 
         try:  # TSS returns a 200 (OK) containing HTML for some error conditions
             return json.loads(SecretServer.process(response).content)
